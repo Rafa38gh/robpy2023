@@ -57,7 +57,7 @@ def tamanho_proj_vetores(v1: np.ndarray, v2: np.ndarray) -> float:
     :param v2: vetor (np.ndarray) coluna de 3 elementos
     :return: escalar: tamanho da projeção de v1 sobre v2
     """
-    pass
+    return np.abs((produto_escalar(v1, v2) / produto_escalar(v2, v2))) * norma_vetor(v2)
 
 
 def proj_vetores(v1: np.ndarray, v2: np.ndarray) -> np.ndarray:
@@ -67,7 +67,7 @@ def proj_vetores(v1: np.ndarray, v2: np.ndarray) -> np.ndarray:
     :param v2: vetor (np.ndarray) coluna de 3 elementos
     :return: vetor (np.ndarray) coluna de 3 elementos com o resultado da projeção
     """
-    pass
+    return (produto_escalar(v1, v2) / produto_escalar(v2, v2)) * v2
 
 
 def ang_vetores(v1: np.ndarray, v2: np.ndarray) -> np.ndarray:
@@ -77,7 +77,7 @@ def ang_vetores(v1: np.ndarray, v2: np.ndarray) -> np.ndarray:
     :param v2: vetor (np.ndarray) coluna de 3 elementos
     :return: escalar: ângulo em radianos
     """
-    pass
+    return np.arccos(produto_escalar(v1, v2) / norma_vetor(v1) * norma_vetor(v2))
 
 
 def produto_vetorial(v1: np.ndarray, v2: np.ndarray) -> np.ndarray:
@@ -87,7 +87,10 @@ def produto_vetorial(v1: np.ndarray, v2: np.ndarray) -> np.ndarray:
     :param v2: vetor (np.ndarray) coluna de 3 elementos
     :return: vetor (np.ndarray) coluna de 3 elementos com o resultado de v1 x v2
     """
-    pass
+    checa_vetor3(v1)
+    checa_vetor3(v2)
+
+    return np.cross(v1, v2)
 
 
 # Parte 2
@@ -111,7 +114,9 @@ def plota_vetor3(v: np.ndarray,
     :param kwargs: parâmetros padrão do plot.
     :return: lista de elementos de linha do vetor plotado.
     """
-    pass
+    a = plot.plot([[vo[0][0], v[0][0] + vo[0][0]],
+                   [[vo[1][0], v[1][0] + vo[1][0]]],
+                   []])
 
 
 def matriz_rotacao_x(theta: float) -> np.ndarray:
@@ -121,7 +126,11 @@ def matriz_rotacao_x(theta: float) -> np.ndarray:
     :param theta: ângulo de rotação
     :return: matriz de rotação
     """
-    pass
+    s = np.sin(theta)
+    c = np.cos(theta)
+    return np.asarray([[1, 0, 0],
+                       [0, c, s],
+                       [0, -s, c]])
 
 
 def matriz_rotacao_y(theta: float) -> np.ndarray:
@@ -131,7 +140,11 @@ def matriz_rotacao_y(theta: float) -> np.ndarray:
     :param theta: ângulo de rotação
     :return: matriz de rotação
     """
-    pass
+    s = np.sin(theta)
+    c = np.cos(theta)
+    return np.asarray([[0, 1, 0],
+                      [c, 0, -s],
+                      [s, 0, c]])
 
 
 def matriz_rotacao_z(theta: float) -> np.ndarray:
@@ -141,7 +154,11 @@ def matriz_rotacao_z(theta: float) -> np.ndarray:
     :param theta: ângulo de rotação
     :return: matriz de rotação
     """
-    pass
+    s = np.sin(theta)
+    c = np.cos(theta)
+    return np.asarray([[c, s, 0],
+                       [-s, c, 0],
+                       [0, 0, 1]])
 
 
 # Parte 3
@@ -153,7 +170,8 @@ def checa_vetor4(v: np.ndarray) -> None:
     :param v: vetor a verificar
     :return: nenhum.
     """
-    pass
+    if v.shape != (4, 1):
+        raise ValueError('O vetor deveria ser 4x1')
 
 
 def checa_matriz33(m: np.ndarray) -> None:
@@ -162,7 +180,8 @@ def checa_matriz33(m: np.ndarray) -> None:
     :param m: matriz a verificar
     :return: nenhum.
     """
-    pass
+    if m.shape != (3, 3):
+        raise ValueError('O vetor deveria ser 3x3')
 
 
 def checa_matriz44(m: np.ndarray) -> None:
@@ -171,7 +190,8 @@ def checa_matriz44(m: np.ndarray) -> None:
     :param m: matriz a verificar
     :return: nenhum.
     """
-    pass
+    if m.shape != (4, 4):
+        raise ValueError('O vetor deveria ser 4x4')
 
 
 def cria_vetor4(v3: np.ndarray) -> np.ndarray:
@@ -180,7 +200,8 @@ def cria_vetor4(v3: np.ndarray) -> np.ndarray:
     :param v3:
     :return:
     """
-    pass
+    checa_vetor3(v3)
+    return np.append(v3, [[1]], axis=0)
 
 
 def checa_matriz_rotacao(m3: np.ndarray, det_tol: float = 0.01) -> None:
@@ -191,8 +212,16 @@ def checa_matriz_rotacao(m3: np.ndarray, det_tol: float = 0.01) -> None:
     :param det_tol: tolerância do valor do determinante
     :return: não há
     """
-    pass
+    if det_tol < 0:
+        raise ValueError('O valor da tolerância do determinante deve ser positivo')
 
+
+    checa_matriz33(m3)
+    erro = np.abs(1 - np.linalg.det(m3))
+
+    if erro > det_tol:
+        raise ValueError('Pelo valor do determinante, a matriz não é de rotação')
+    pass
 
 def cria_operador4(m_rot_b_a: np.ndarray = np.eye(3), v_o_a: np.ndarray = np.zeros([3, 1]), det_tol: float = 0.01) \
         -> np.ndarray:

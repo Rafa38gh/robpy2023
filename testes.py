@@ -3,6 +3,6 @@
 import numpy as np
 import RobPy as rp
 
-m = rp.matriz_rotacao_x(30.5 * np.pi / 180)
+M = rp.matriz_rotacao_x(43*np.pi/180)
 
-print(1 - np.linalg.det(m))
+print(rp.cria_operador4(m_rot_b_a=M))

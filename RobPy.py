@@ -233,8 +233,11 @@ def cria_operador4(m_rot_b_a: np.ndarray = np.eye(3), v_o_a: np.ndarray = np.zer
     :param det_tol:
     :return:
     """
-    pass
-
+    checa_matriz_rotacao(m_rot_b_a, det_tol=det_tol)
+    checa_vetor3(v_o_a)
+    t = np.append(m_rot_b_a, v_o_a, axis=1)
+    t = np.append(t, np.asarray([[0, 0, 0, 1]]), axis=0)
+    return t
 
 def constroi_vetor(v_b: np.ndarray,
                    m_rot_b_a: np.ndarray = np.eye(3),

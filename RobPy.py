@@ -312,7 +312,10 @@ def __eixo_reta_12_np(po1: np.ndarray, vs1: np.ndarray, po2: np.ndarray, vs2: np
     :param vs2: Vetor orientação da reta 1
     :return: vetor unitário que aponta da reta 1 à reta 2
     """
-    pass
+    e = produto_vetorial(vs1, vs2)
+    e = e / norma_vetor(e)
+    d = po2 - po1
+    e = e * np.sign(produto_escalar(d, e))
 
 
 def __eixo_reta_12_p(po1: np.ndarray, po2: np.ndarray, vs: np.ndarray) -> float:
@@ -324,7 +327,9 @@ def __eixo_reta_12_p(po1: np.ndarray, po2: np.ndarray, vs: np.ndarray) -> float:
     :param vs: Vetor direção de ambas as retas
     :return: vetor unitário que aponta da reta 1 à reta 2
     """
-    pass
+    d = po2 - po1
+    dn = d - proj_vetores(d, vs)
+    return dn/norma_vetor(dn)
 
 
 def eixo_reta_12(po1: np.ndarray, vs1: np.ndarray, po2: np.ndarray, vs2: np.ndarray, angtol=1e-3) -> float:
@@ -337,7 +342,6 @@ def eixo_reta_12(po1: np.ndarray, vs1: np.ndarray, po2: np.ndarray, vs2: np.ndar
     :param angtol: Tolerância de ângulo entre as retas para decidir se são paralelas
     :return: vetor unitário que aponta da reta 1 à reta 2
     """
-    pass
 
 
 def ang_twist_dir_nc_rad(po1: np.ndarray, vs1: np.ndarray, po2: np.ndarray, vs2: np.ndarray, angtol=1e-3) -> float:
